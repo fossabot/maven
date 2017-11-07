@@ -36,7 +36,7 @@ import org.eclipse.aether.impl.MetadataResolver;
 import org.eclipse.aether.impl.RepositoryEventDispatcher;
 import org.eclipse.aether.impl.SyncContextFactory;
 import org.eclipse.aether.impl.VersionResolver;
-import org.eclipse.aether.internal.impl.CacheUtils;
+import org.eclipse.aether.internal.impl.CacheUtils; // deprecated - no replacement
 import org.eclipse.aether.metadata.DefaultMetadata;
 import org.eclipse.aether.metadata.Metadata;
 import org.eclipse.aether.repository.ArtifactRepository;

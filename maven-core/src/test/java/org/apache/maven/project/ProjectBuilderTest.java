@@ -23,9 +23,9 @@ import java.io.File;
 import java.util.Properties;
 
 import org.apache.maven.AbstractCoreMavenComponentTestCase;
+import org.apache.maven.building.Source;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.building.FileModelSource;
-import org.apache.maven.model.building.ModelSource;
 
 public class ProjectBuilderTest
     extends AbstractCoreMavenComponentTestCase
@@ -59,7 +59,7 @@ public class ProjectBuilderTest
         MavenSession mavenSession = createMavenSession( pomFile );
         ProjectBuildingRequest configuration = new DefaultProjectBuildingRequest();
         configuration.setRepositorySession( mavenSession.getRepositorySession() );
-        ModelSource modelSource = new FileModelSource( pomFile );
+        Source modelSource = new FileModelSource( pomFile );
         ProjectBuildingResult result =
             lookup( org.apache.maven.project.ProjectBuilder.class ).build( modelSource, configuration );
 

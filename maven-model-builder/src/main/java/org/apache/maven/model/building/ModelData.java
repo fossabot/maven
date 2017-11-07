@@ -21,6 +21,7 @@ package org.apache.maven.model.building;
 
 import java.util.List;
 
+import org.apache.maven.building.Source;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Profile;
 
@@ -32,7 +33,7 @@ import org.apache.maven.model.Profile;
  */
 class ModelData
 {
-    private final ModelSource source;
+    private final Source source;
 
     private Model model;
 
@@ -74,7 +75,7 @@ class ModelData
         setVersion( version );
     }
 
-    public ModelSource getSource()
+    public Source getSource()
     {
         return source;
     }

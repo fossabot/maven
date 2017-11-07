@@ -27,11 +27,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import org.apache.maven.building.Source;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Parent;
 import org.apache.maven.model.Repository;
 import org.apache.maven.model.building.FileModelSource;
-import org.apache.maven.model.building.ModelSource;
 import org.apache.maven.model.resolution.InvalidRepositoryException;
 import org.apache.maven.model.resolution.ModelResolver;
 import org.apache.maven.model.resolution.UnresolvableModelException;
@@ -162,7 +164,7 @@ class DefaultModelResolver
     }
 
     @Override
-    public ModelSource resolveModel( String groupId, String artifactId, String version )
+    public Source resolveModel( String groupId, String artifactId, String version )
         throws UnresolvableModelException
     {
         Artifact pomArtifact = new DefaultArtifact( groupId, artifactId, "", "pom", version );
@@ -184,7 +186,7 @@ class DefaultModelResolver
     }
 
     @Override
-    public ModelSource resolveModel( final Parent parent )
+    public Source resolveModel( final Parent parent )
         throws UnresolvableModelException
     {
         try
@@ -232,7 +234,7 @@ class DefaultModelResolver
     }
 
     @Override
-    public ModelSource resolveModel( final Dependency dependency )
+    public Source resolveModel( final Dependency dependency )
         throws UnresolvableModelException
     {
         try

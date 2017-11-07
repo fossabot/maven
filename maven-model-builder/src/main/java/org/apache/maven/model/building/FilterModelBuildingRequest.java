@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.maven.building.Source;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Profile;
 import org.apache.maven.model.resolution.ModelResolver;
@@ -61,13 +62,13 @@ class FilterModelBuildingRequest
     }
 
     @Override
-    public ModelSource getModelSource()
+    public Source getModelSource()
     {
         return request.getModelSource();
     }
 
     @Override
-    public FilterModelBuildingRequest setModelSource( ModelSource modelSource )
+    public FilterModelBuildingRequest setModelSource( Source modelSource )
     {
         request.setModelSource( modelSource );
 

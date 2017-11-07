@@ -24,6 +24,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.artifact.versioning.InvalidVersionSpecificationException;
 import org.apache.maven.artifact.versioning.VersionRange;
+import org.apache.maven.building.Source;
 import org.apache.maven.model.Activation;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Dependency;
@@ -502,7 +503,7 @@ public class DefaultModelBuilder
         }
     }
 
-    private Model readModel( ModelSource modelSource, File pomFile, ModelBuildingRequest request,
+    private Model readModel( Source modelSource, File pomFile, ModelBuildingRequest request,
                              DefaultModelProblemCollector problems )
         throws ModelBuildingException
     {
@@ -805,7 +806,7 @@ public class DefaultModelBuilder
         return interpolatedModel;
     }
 
-    private ModelData readParent( Model childModel, ModelSource childSource, ModelBuildingRequest request,
+    private ModelData readParent( Model childModel, Source childSource, ModelBuildingRequest request,
                                   DefaultModelProblemCollector problems )
         throws ModelBuildingException
     {
@@ -844,7 +845,7 @@ public class DefaultModelBuilder
                 File pomFile = parentData.getModel().getPomFile();
                 if ( pomFile != null )
                 {
-                    ModelSource expectedParentSource = getParentPomFile( childModel, childSource );
+                    Source expectedParentSource = getParentPomFile( childModel, childSource );
 
                     if ( expectedParentSource == null || ( expectedParentSource instanceof ModelSource2
                         && !pomFile.toURI().equals( ( (ModelSource2) expectedParentSource ).getLocationURI() ) ) )
@@ -872,12 +873,12 @@ public class DefaultModelBuilder
         return parentData;
     }
 
-    private ModelData readParentLocally( Model childModel, ModelSource childSource, ModelBuildingRequest request,
+    private ModelData readParentLocally( Model childModel, Source childSource, ModelBuildingRequest request,
                                          DefaultModelProblemCollector problems )
         throws ModelBuildingException
     {
         final Parent parent = childModel.getParent();
-        final ModelSource candidateSource;
+        final Source candidateSource;
         final Model candidateModel;
         final WorkspaceModelResolver resolver = request.getWorkspaceModelResolver();
         if ( resolver == null )
@@ -892,7 +893,7 @@ public class DefaultModelBuilder
             File pomFile = null;
             if ( candidateSource instanceof FileModelSource )
             {
-                pomFile = ( (FileModelSource) candidateSource ).getPomFile();
+                pomFile = ( (FileModelSource) candidateSource ).getFile();
             }
 
             candidateModel = readModel( candidateSource, pomFile, request, problems );
@@ -907,7 +908,7 @@ public class DefaultModelBuilder
             catch ( UnresolvableModelException e )
             {
                 problems.add( new ModelProblemCollectorRequest( Severity.FATAL, Version.BASE ) //
-                .setMessage( e.getMessage().toString() ).setLocation( parent.getLocation( "" ) ).setException( e ) );
+                .setMessage( e.getMessage() ).setLocation( parent.getLocation( "" ) ).setException( e ) );
                 throw problems.newModelBuildingException();
             }
             if ( candidateModel == null )
@@ -1012,7 +1013,7 @@ public class DefaultModelBuilder
         return parentData;
     }
 
-    private ModelSource getParentPomFile( Model childModel, ModelSource source )
+    private Source getParentPomFile( Model childModel, Source source )
     {
         if ( !( source instanceof ModelSource2 ) )
         {
@@ -1046,7 +1047,7 @@ public class DefaultModelBuilder
         Validate.notNull( modelResolver, "request.modelResolver cannot be null (parent POM %s and POM %s)",
             ModelProblemUtils.toId( groupId, artifactId, version ), ModelProblemUtils.toSourceHint( childModel ) );
 
-        ModelSource modelSource;
+        Source modelSource;
         try
         {
             modelSource = modelResolver.resolveModel( parent );
@@ -1233,7 +1234,7 @@ public class DefaultModelBuilder
                     catch ( UnresolvableModelException e )
                     {
                         problems.add( new ModelProblemCollectorRequest( Severity.FATAL, Version.BASE )
-                            .setMessage( e.getMessage().toString() ).setException( e ) );
+                            .setMessage( e.getMessage() ).setException( e ) );
                         continue;
                     }
                 }
@@ -1241,7 +1242,7 @@ public class DefaultModelBuilder
                 // no workspace resolver or workspace resolver returned null (i.e. model not in workspace)
                 if ( importModel == null )
                 {
-                    final ModelSource importSource;
+                    final Source importSource;
                     try
                     {
                         importSource = modelResolver.resolveModel( groupId, artifactId, version );

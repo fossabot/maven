@@ -33,6 +33,8 @@ import org.apache.maven.DefaultMaven;
 import org.apache.maven.MavenExecutionException;
 import org.apache.maven.ProjectCycleException;
 import org.apache.maven.artifact.ArtifactUtils;
+import org.apache.maven.building.Source;
+import org.apache.maven.building.UrlSource;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.execution.ProjectDependencyGraph;
@@ -40,9 +42,7 @@ import org.apache.maven.model.Plugin;
 import org.apache.maven.model.building.DefaultModelProblem;
 import org.apache.maven.model.building.ModelProblem;
 import org.apache.maven.model.building.ModelProblemUtils;
-import org.apache.maven.model.building.ModelSource;
 import org.apache.maven.model.building.Result;
-import org.apache.maven.model.building.UrlModelSource;
 import org.apache.maven.project.DuplicateProjectException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuilder;
@@ -375,7 +375,7 @@ public class DefaultGraphBuilder
         //
         if ( request.getPom() == null )
         {
-            ModelSource modelSource = new UrlModelSource( DefaultMaven.class.getResource( "project/standalone.xml" ) );
+            Source modelSource = new UrlSource( DefaultMaven.class.getResource( "project/standalone.xml" ) );
             MavenProject project = projectBuilder.build( modelSource, request.getProjectBuildingRequest() )
                 .getProject();
             project.setExecutionRoot( true );

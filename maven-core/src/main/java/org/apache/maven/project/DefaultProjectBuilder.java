@@ -37,6 +37,8 @@ import org.apache.maven.artifact.InvalidRepositoryException;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager;
 import org.apache.maven.bridge.MavenRepositorySystem;
+import org.apache.maven.building.Source;
+import org.apache.maven.building.StringSource;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.DependencyManagement;
@@ -55,8 +57,6 @@ import org.apache.maven.model.building.ModelBuildingRequest;
 import org.apache.maven.model.building.ModelBuildingResult;
 import org.apache.maven.model.building.ModelProblem;
 import org.apache.maven.model.building.ModelProcessor;
-import org.apache.maven.model.building.ModelSource;
-import org.apache.maven.model.building.StringModelSource;
 import org.apache.maven.model.resolution.ModelResolver;
 import org.apache.maven.repository.internal.ArtifactDescriptorUtils;
 import org.codehaus.plexus.component.annotations.Component;
@@ -117,13 +117,13 @@ public class DefaultProjectBuilder
     }
 
     @Override
-    public ProjectBuildingResult build( ModelSource modelSource, ProjectBuildingRequest request )
+    public ProjectBuildingResult build( Source modelSource, ProjectBuildingRequest request )
         throws ProjectBuildingException
     {
         return build( null, modelSource, new InternalConfig( request, null, null ) );
     }
 
-    private ProjectBuildingResult build( File pomFile, ModelSource modelSource, InternalConfig config )
+    private ProjectBuildingResult build( File pomFile, Source modelSource, InternalConfig config )
         throws ProjectBuildingException
     {
         ClassLoader oldContextClassLoader = Thread.currentThread().getContextClassLoader();
@@ -327,7 +327,7 @@ public class DefaultProjectBuilder
         return build( localProject ? pomFile : null, new FileModelSource( pomFile ), config );
     }
 
-    private ModelSource createStubModelSource( Artifact artifact )
+    private Source createStubModelSource( Artifact artifact )
     {
         StringBuilder buffer = new StringBuilder( 1024 );
 
@@ -340,7 +340,7 @@ public class DefaultProjectBuilder
         buffer.append( "<packaging>" ).append( artifact.getType() ).append( "</packaging>" );
         buffer.append( "</project>" );
 
-        return new StringModelSource( buffer, artifact.getId() );
+        return new StringSource( buffer, artifact.getId() );
     }
 
     @Override
