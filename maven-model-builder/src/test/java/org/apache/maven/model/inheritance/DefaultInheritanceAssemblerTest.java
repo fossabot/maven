@@ -24,6 +24,8 @@ import org.apache.maven.model.building.SimpleProblemCollector;
 import org.apache.maven.model.io.ModelParseException;
 import org.apache.maven.model.io.ModelReader;
 import org.apache.maven.model.io.ModelWriter;
+import org.codehaus.plexus.ContainerConfiguration;
+import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusTestCase;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
@@ -58,6 +60,12 @@ public class DefaultInheritanceAssemblerTest
         reader = lookup( ModelReader.class );
         writer = lookup( ModelWriter.class );
         assembler = lookup( InheritanceAssembler.class );
+    }
+    protected void customizeContainerConfiguration( @SuppressWarnings( "unused" ) final ContainerConfiguration configuration )
+    {
+        super.customizeContainerConfiguration(configuration);
+        configuration.setAutoWiring( true );
+        configuration.setClassPathScanning( PlexusConstants.SCANNING_INDEX );
     }
 
     private File getPom( String name )
