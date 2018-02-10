@@ -32,6 +32,8 @@ import org.apache.maven.settings.io.xpp3.SettingsXpp3Writer;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.WriterFactory;
 
+import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
+
 /**
  * Handles serialization of settings into the default textual format.
  *
@@ -74,12 +76,7 @@ public class DefaultSettingsWriter
         Validate.notNull( output, "output cannot be null" );
         Validate.notNull( settings, "settings cannot be null" );
 
-        String encoding = settings.getModelEncoding();
-        // TODO Use StringUtils here
-        if ( encoding == null || encoding.length() <= 0 )
-        {
-            encoding = "UTF-8";
-        }
+        String encoding = defaultIfEmpty ( settings.getModelEncoding(), "UTF-8" );
 
         try ( final Writer out = new OutputStreamWriter( output, encoding ) )
         {
